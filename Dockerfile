@@ -16,5 +16,5 @@ COPY . .
 # Thu thập static files
 RUN python manage.py collectstatic --noinput
 
-# Chạy migrate rồi khởi động Gunicorn (dùng shell form để $PORT được đọc đúng)
-CMD python manage.py migrate && gunicorn --bind 0.0.0.0:$PORT du_an_ban_xe.wsgi:application
+# Chạy migrate, tạo dữ liệu mẫu (các dòng xe + tài khoản admin 123456) rồi khởi động Gunicorn
+CMD python manage.py migrate && python manage.py tao_du_lieu_mau && python manage.py collectstatic --noinput && gunicorn --bind 0.0.0.0:$PORT du_an_ban_xe.wsgi:application

@@ -41,8 +41,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if not User.objects.filter(username='admin').exists():
-            User.objects.create_superuser('admin', 'admin@autoviet.vn', 'Admin@12345')
-            self.stdout.write(self.style.SUCCESS('Đã tạo tài khoản quản trị: admin / Admin@12345'))
+            User.objects.create_superuser('admin', 'admin@autoviet.vn', '123456')
+            self.stdout.write(self.style.SUCCESS('Đã tạo tài khoản quản trị: admin / 123456'))
+        else:
+            admin_user = User.objects.get(username='admin')
+            admin_user.set_password('123456')
+            admin_user.is_superuser = True
+            admin_user.is_staff = True
+            admin_user.save()
+            self.stdout.write(self.style.SUCCESS('Đã cập nhật mật khẩu admin: 123456'))
 
         danh_sach_hang = [
             ('VinFast', 'Việt Nam', 'Thương hiệu ô tô điện thông minh hàng đầu Việt Nam.'),
