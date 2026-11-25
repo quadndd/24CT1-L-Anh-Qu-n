@@ -1,7 +1,7 @@
 # ---- Dockerfile ------------------------------------------------
 FROM python:3.12-slim
 
-# Cài các phụ thuộc hệ thống cần thiết
+# Cài các phụ thuộc hệ thống
 RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -16,5 +16,5 @@ COPY . .
 # Thu thập static files
 RUN python manage.py collectstatic --noinput
 
-# Lệnh chạy Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "du_an_ban_xe.wsgi:application"]
+# Chạy migrate rồi khởi động Gunicorn (dùng shell form để $PORT được đọc đúng)
+CMD python manage.py migrate && gunicorn --bind 0.0.0.0:$PORT du_an_ban_xe.wsgi:application
