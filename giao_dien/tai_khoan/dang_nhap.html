@@ -1,0 +1,42 @@
+{% extends 'khung_chinh.html' %}
+
+{% block tieu_de %}Đăng Nhập - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<div class="row justify-content-center py-4">
+  <div class="col-md-6 col-lg-5">
+    <div class="card border-0 shadow-sm p-4 p-md-5">
+      <div class="text-center mb-4">
+        <i class="bi bi-person-circle fs-1 text-danger"></i>
+        <h2 class="fw-bold mt-2">Đăng Nhập</h2>
+        <p class="text-muted small">Đăng nhập để quản lý đơn hàng, đặt mua xe và theo dõi lịch lái thử.</p>
+      </div>
+
+      {% if bieu_mau.non_field_errors %}
+        <div class="alert alert-danger">{{ bieu_mau.non_field_errors }}</div>
+      {% endif %}
+
+      <form method="post" class="d-grid gap-3">
+        {% csrf_token %}
+        {% if duong_dan_tiep %}
+          <input type="hidden" name="next" value="{{ duong_dan_tiep }}">
+        {% endif %}
+        <div>
+          <label class="form-label fw-semibold">{{ bieu_mau.username.label }}</label>
+          {{ bieu_mau.username }}
+        </div>
+        <div>
+          <label class="form-label fw-semibold">{{ bieu_mau.password.label }}</label>
+          {{ bieu_mau.password }}
+        </div>
+        <button type="submit" class="btn nut-chinh btn-lg mt-2">Đăng nhập</button>
+      </form>
+
+      <div class="text-center mt-4 small">
+        Chưa có tài khoản?
+        <a href="{% url 'tai_khoan:dang_ky' %}" class="text-danger fw-semibold text-decoration-none">Đăng ký ngay</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

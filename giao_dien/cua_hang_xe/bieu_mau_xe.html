@@ -1,0 +1,133 @@
+{% extends 'khung_chinh.html' %}
+{% load static %}
+
+{% block tieu_de %}{{ tieu_de_trang }} - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold mb-0"><i class="bi bi-plus-square text-danger me-2"></i>{{ tieu_de_trang }}</h2>
+  <a href="{% url 'cua_hang_xe:quan_ly_xe' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left me-1"></i>Quay lại danh sách
+  </a>
+</div>
+
+<div class="card border-0 shadow-sm p-4">
+  <form method="post" enctype="multipart/form-data" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-12"><h5 class="fw-bold border-bottom pb-2">1. Thông tin cơ bản</h5></div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">{{ bieu_mau.ten_xe.label }} *</label>
+      {{ bieu_mau.ten_xe }}
+      {% if bieu_mau.ten_xe.errors %}<div class="text-danger small">{{ bieu_mau.ten_xe.errors|striptags }}</div>{% endif %}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">{{ bieu_mau.hang_xe.label }} *</label>
+      {{ bieu_mau.hang_xe }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">{{ bieu_mau.loai_xe.label }}</label>
+      {{ bieu_mau.loai_xe }}
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label fw-semibold">{{ bieu_mau.gia_ban.label }} *</label>
+      {{ bieu_mau.gia_ban }}
+      {% if bieu_mau.gia_ban.errors %}<div class="text-danger small">{{ bieu_mau.gia_ban.errors|striptags }}</div>{% endif %}
+    </div>
+    <div class="col-md-4">
+      <label class="form-label fw-semibold">{{ bieu_mau.gia_khuyen_mai.label }}</label>
+      {{ bieu_mau.gia_khuyen_mai }}
+      {% if bieu_mau.gia_khuyen_mai.errors %}<div class="text-danger small">{{ bieu_mau.gia_khuyen_mai.errors|striptags }}</div>{% endif %}
+    </div>
+    <div class="col-md-4">
+      <label class="form-label fw-semibold">{{ bieu_mau.so_luong_ton.label }} *</label>
+      {{ bieu_mau.so_luong_ton }}
+    </div>
+
+    <div class="col-12 mt-4"><h5 class="fw-bold border-bottom pb-2">2. Thông số kỹ thuật</h5></div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">{{ bieu_mau.nam_san_xuat.label }}</label>
+      {{ bieu_mau.nam_san_xuat }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">{{ bieu_mau.mau_sac.label }}</label>
+      {{ bieu_mau.mau_sac }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">{{ bieu_mau.xuat_xu.label }}</label>
+      {{ bieu_mau.xuat_xu }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">{{ bieu_mau.tinh_trang.label }}</label>
+      {{ bieu_mau.tinh_trang }}
+    </div>
+
+    <div class="col-md-4">
+      <label class="form-label fw-semibold">{{ bieu_mau.dong_co.label }} *</label>
+      {{ bieu_mau.dong_co }}
+    </div>
+    <div class="col-md-4">
+      <label class="form-label fw-semibold">{{ bieu_mau.cong_suat.label }}</label>
+      {{ bieu_mau.cong_suat }}
+    </div>
+    <div class="col-md-2">
+      <label class="form-label fw-semibold">{{ bieu_mau.hop_so.label }}</label>
+      {{ bieu_mau.hop_so }}
+    </div>
+    <div class="col-md-2">
+      <label class="form-label fw-semibold">{{ bieu_mau.nhien_lieu.label }}</label>
+      {{ bieu_mau.nhien_lieu }}
+    </div>
+    <div class="col-md-3">
+      <label class="form-label fw-semibold">{{ bieu_mau.so_cho_ngoi.label }}</label>
+      {{ bieu_mau.so_cho_ngoi }}
+    </div>
+
+    <div class="col-12 mt-4"><h5 class="fw-bold border-bottom pb-2">3. Hình ảnh &amp; Mô tả</h5></div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">{{ bieu_mau.hinh_anh_chinh.label }}</label>
+      {{ bieu_mau.hinh_anh_chinh }}
+      {% if che_do_sua and xe.hinh_anh_chinh %}
+        <div class="mt-2">
+          <img src="{{ xe.hinh_anh_chinh.url }}" class="rounded border" style="height: 80px;" alt="{{ xe.ten_xe }}">
+        </div>
+      {% elif che_do_sua and xe.duong_dan_anh_mau %}
+        <div class="mt-2">
+          <img src="{% static xe.duong_dan_anh_mau %}" class="rounded border" style="height: 80px;" alt="{{ xe.ten_xe }}">
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Thư viện ảnh phụ (có thể chọn nhiều ảnh)</label>
+      <input type="file" name="anh_phu" class="form-control" accept="image/*" multiple>
+    </div>
+
+    <div class="col-12">
+      <label class="form-label fw-semibold">{{ bieu_mau.mo_ta_ngan.label }} *</label>
+      {{ bieu_mau.mo_ta_ngan }}
+    </div>
+    <div class="col-12">
+      <label class="form-label fw-semibold">{{ bieu_mau.mo_ta_chi_tiet.label }} *</label>
+      {{ bieu_mau.mo_ta_chi_tiet }}
+    </div>
+
+    <div class="col-12 d-flex gap-4 mt-2">
+      <div class="form-check">
+        {{ bieu_mau.xe_noi_bat }}
+        <label class="form-check-label fw-semibold" for="{{ bieu_mau.xe_noi_bat.id_for_label }}">Hiển thị ở mục Xe nổi bật</label>
+      </div>
+      <div class="form-check">
+        {{ bieu_mau.dang_kinh_doanh }}
+        <label class="form-check-label fw-semibold" for="{{ bieu_mau.dang_kinh_doanh.id_for_label }}">Đang kinh doanh (Hiển thị trên web)</label>
+      </div>
+    </div>
+
+    <div class="col-12 mt-4">
+      <button type="submit" class="btn nut-chinh btn-lg px-4">
+        <i class="bi bi-check-circle me-2"></i>{% if che_do_sua %}Lưu thay đổi{% else %}Thêm xe mới{% endif %}
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

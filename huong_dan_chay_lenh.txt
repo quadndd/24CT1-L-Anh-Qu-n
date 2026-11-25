@@ -1,0 +1,46 @@
+============================================================
+HƯỚNG DẪN CÁC LỆNH CHẠY WEBSITE BÁN XE AUTOVIET (DJANGO)
+============================================================
+
+1. DI CHUYỂN VÀO THƯ MỤC DỰ ÁN
+------------------------------
+cd "C:\Users\quan\OneDrive\Tài liệu\webdjango\de tai web django"
+
+
+2. CHẠY WEBSITE (SERVER PHÁT TRIỂN)
+-----------------------------------
+python manage.py runserver
+
+- Truy cập trang chủ:     http://127.0.0.1:8000/
+- Truy cập trang quản trị: http://127.0.0.1:8000/quan-tri/
+- Tài khoản quản trị mẫu:  admin / 123456
+- Dừng server: Nhấn Ctrl + C trong terminal
+
+
+3. CẬP NHẬT DATABASE (KHI THÊM/SỬA MODELS.PY)
+---------------------------------------------
+python manage.py makemigrations
+python manage.py migrate
+
+
+4. KHỞI TẠO DỮ LIỆU MẪU & TẠO TÀI KHOẢN QUẢN TRỊ MỚI
+----------------------------------------------------
+# Tạo dữ liệu mẫu (hãng xe, loại xe, 8 mẫu xe, tài khoản admin):
+python manage.py tao_du_lieu_mau
+
+# Tạo thêm tài khoản quản trị (superuser) mới:
+python manage.py createsuperuser
+
+
+5. KIỂM TRA LỖI HỆ THỐNG & CHẠY KIỂM THỬ (TEST)
+-----------------------------------------------
+# Kiểm tra cấu hình dự án:
+python manage.py check
+
+# Chạy toàn bộ test tự động:
+python manage.py test
+
+
+6. CÀI ĐẶT THƯ VIỆN (NẾU CHUYỂN SANG MÁY KHÁC)
+----------------------------------------------
+pip install django pillow

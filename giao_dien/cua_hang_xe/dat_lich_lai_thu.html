@@ -1,0 +1,54 @@
+{% extends 'khung_chinh.html' %}
+
+{% block tieu_de %}Đặt Lịch Lái Thử - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm p-4 p-md-5">
+      <div class="text-center mb-4">
+        <i class="bi bi-calendar-heart fs-1 text-danger"></i>
+        <h2 class="fw-bold mt-2">Đăng Ký Lái Thử Xe Miễn Phí</h2>
+        <p class="text-muted">Trải nghiệm thực tế cảm giác lái và các tính năng an toàn tại Showroom AutoViet.</p>
+      </div>
+
+      <form method="post" class="row g-3">
+        {% csrf_token %}
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ bieu_mau.xe.label }}</label>
+          {{ bieu_mau.xe }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ bieu_mau.ho_ten.label }}</label>
+          {{ bieu_mau.ho_ten }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ bieu_mau.so_dien_thoai.label }}</label>
+          {{ bieu_mau.so_dien_thoai }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">{{ bieu_mau.email.label }}</label>
+          {{ bieu_mau.email }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">{{ bieu_mau.ngay_hen.label }}</label>
+          {{ bieu_mau.ngay_hen }}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">{{ bieu_mau.gio_hen.label }}</label>
+          {{ bieu_mau.gio_hen }}
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ bieu_mau.ghi_chu.label }}</label>
+          {{ bieu_mau.ghi_chu }}
+        </div>
+        <div class="col-12 mt-3">
+          <button type="submit" class="btn nut-chinh btn-lg w-100">
+            <i class="bi bi-check2-circle me-2"></i>Xác nhận đặt lịch lái thử
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

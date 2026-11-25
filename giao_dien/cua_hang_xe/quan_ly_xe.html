@@ -1,0 +1,155 @@
+{% extends 'khung_chinh.html' %}
+{% load static bo_loc_tien_te %}
+
+{% block tieu_de %}Thêm Xe &amp; Quản Lý Kho - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+  <div>
+    <h2 class="fw-bold mb-1"><i class="bi bi-plus-circle-fill text-danger me-2"></i>Thêm xe &amp; Quản lý số lượng kho</h2>
+    <p class="text-muted mb-0">Thêm loại xe mới, hãng xe mới, nhập thêm số lượng hoặc đăng bán mẫu xe mới</p>
+  </div>
+  <a href="{% url 'cua_hang_xe:them_xe_moi' %}" class="btn nut-chinh">
+    <i class="bi bi-car-front-fill me-1"></i>Đăng mẫu xe mới
+  </a>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm p-3 h-100">
+      <h6 class="fw-bold mb-2"><i class="bi bi-diagram-3 text-danger me-1"></i>Thêm loại xe mới</h6>
+      <form action="{% url 'cua_hang_xe:them_loai_xe' %}" method="post" class="row g-2 align-items-end">
+        {% csrf_token %}
+        <div class="col-sm-5">
+          <label class="form-label small mb-1">Tên loại xe *</label>
+          {{ bieu_mau_loai_xe.ten_loai }}
+        </div>
+        <div class="col-sm-5">
+          <label class="form-label small mb-1">Mô tả</label>
+          {{ bieu_mau_loai_xe.mo_ta }}
+        </div>
+        <div class="col-sm-2 d-grid">
+          <button type="submit" class="btn btn-dark btn-sm">+ Thêm</button>
+        </div>
+      </form>
+      <div class="mt-2 small text-muted">
+        Hiện có:
+        {% for loai in danh_sach_loai_xe %}
+          <span class="badge bg-light text-dark border me-1">{{ loai.ten_loai }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card border-0 shadow-sm p-3 h-100">
+      <h6 class="fw-bold mb-2"><i class="bi bi-tags text-primary me-1"></i>Thêm hãng xe mới</h6>
+      <form action="{% url 'cua_hang_xe:them_hang_xe' %}" method="post" class="row g-2 align-items-end">
+        {% csrf_token %}
+        <div class="col-sm-5">
+          <label class="form-label small mb-1">Tên hãng *</label>
+          {{ bieu_mau_hang_xe.ten_hang }}
+        </div>
+        <div class="col-sm-5">
+          <label class="form-label small mb-1">Quốc gia</label>
+          {{ bieu_mau_hang_xe.quoc_gia }}
+        </div>
+        <div class="col-sm-2 d-grid">
+          <button type="submit" class="btn btn-dark btn-sm">+ Thêm</button>
+        </div>
+      </form>
+      <div class="mt-2 small text-muted">
+        Hiện có:
+        {% for hang in danh_sach_hang_xe %}
+          <span class="badge bg-light text-dark border me-1">{{ hang.ten_hang }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card border-0 shadow-sm p-3">
+  <h5 class="fw-bold mb-3">Danh sách xe hiện có ({{ danh_sach_xe|length }} mẫu) &amp; Nhập thêm số lượng</h5>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Hình ảnh</th>
+          <th>Tên xe</th>
+          <th>Hãng / Loại</th>
+          <th>Giá bán</th>
+          <th style="width: 210px;">Tồn kho &amp; Nhập thêm</th>
+          <th>Trạng thái</th>
+          <th class="text-end">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for xe in danh_sach_xe %}
+          <tr>
+            <td>
+              <div style="width: 76px; height: 50px; background: #f1f5f9;" class="rounded overflow-hidden">
+                {% if xe.hinh_anh_chinh %}
+                  <img src="{{ xe.hinh_anh_chinh.url }}" class="w-100 h-100 object-fit-cover" alt="{{ xe.ten_xe }}">
+                {% elif xe.duong_dan_anh_mau %}
+                  <img src="{% static xe.duong_dan_anh_mau %}" class="w-100 h-100 object-fit-cover" alt="{{ xe.ten_xe }}">
+                {% endif %}
+              </div>
+            </td>
+            <td>
+              <a href="{% url 'cua_hang_xe:chi_tiet_xe' xe.duong_dan %}" class="fw-bold text-dark text-decoration-none">
+                {{ xe.ten_xe }}
+              </a>
+              <div class="small text-muted">Đời {{ xe.nam_san_xuat }} &bull; {{ xe.mau_sac }}</div>
+            </td>
+            <td>
+              <div>{{ xe.hang_xe.ten_hang }}</div>
+              <small class="text-muted">{{ xe.loai_xe.ten_loai|default:'Chưa phân loại' }}</small>
+            </td>
+            <td>
+              <div class="fw-bold text-danger">{{ xe.lay_gia_hien_tai|tien_vnd }}</div>
+              {% if xe.co_giam_gia %}
+                <small class="text-muted text-decoration-line-through">{{ xe.gia_ban|tien_vnd }}</small>
+              {% endif %}
+            </td>
+            <td>
+              <div class="fw-semibold mb-1">Hiện còn: <span class="text-primary">{{ xe.so_luong_ton }}</span> chiếc</div>
+              <form action="{% url 'cua_hang_xe:nhap_them_so_luong' xe.pk %}" method="post" class="d-flex gap-1">
+                {% csrf_token %}
+                <input type="number" name="so_luong_nhap" value="1" min="1" class="form-control form-control-sm" style="width: 70px;">
+                <button type="submit" class="btn btn-sm btn-success">+ Nhập</button>
+              </form>
+            </td>
+            <td>
+              {% if xe.dang_kinh_doanh %}
+                <span class="badge bg-success">Đang bán</span>
+              {% else %}
+                <span class="badge bg-secondary">Tạm ẩn</span>
+              {% endif %}
+              {% if xe.xe_noi_bat %}
+                <span class="badge bg-warning text-dark">Nổi bật</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <div class="d-inline-flex gap-1">
+                <a href="{% url 'cua_hang_xe:sua_xe' xe.pk %}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa">
+                  <i class="bi bi-pencil-square"></i> Sửa
+                </a>
+                <form action="{% url 'cua_hang_xe:xoa_xe' xe.pk %}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa mẫu xe {{ xe.ten_xe }}?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-outline-danger" title="Xóa">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-4 text-muted">Chưa có mẫu xe nào trong hệ thống.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

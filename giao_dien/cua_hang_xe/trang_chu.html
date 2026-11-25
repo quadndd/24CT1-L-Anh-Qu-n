@@ -1,0 +1,117 @@
+{% extends 'khung_chinh.html' %}
+{% load static bo_loc_tien_te %}
+
+{% block tieu_de %}Trang Chủ - AutoViet Showroom{% endblock %}
+
+{% block noi_dung %}
+<section class="khung-anh-bia p-4 p-md-5 mb-5 shadow">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <span class="badge bg-danger mb-3 px-3 py-2">Showroom Ô Tô Chính Hãng 2026</span>
+      <h1 class="display-5 fw-bold mb-3">Chọn Chiếc Xe Mơ Ước Cùng AutoViet</h1>
+      <p class="lead text-light opacity-75 mb-4">
+        Đa dạng các dòng xe Sedan, SUV, Bán tải và Xe điện thế hệ mới. Thủ tục mua xe nhanh gọn, hỗ trợ trả góp lên đến 80% giá trị xe.
+      </p>
+      <div class="d-flex flex-wrap gap-3">
+        <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="btn btn-danger btn-lg px-4">
+          <i class="bi bi-grid-fill me-2"></i>Khám phá {{ tong_so_xe }} mẫu xe
+        </a>
+        <a href="{% url 'cua_hang_xe:dat_lich_lai_thu' %}" class="btn btn-outline-light btn-lg px-4">
+          <i class="bi bi-calendar-check me-2"></i>Đặt lịch lái thử
+        </a>
+      </div>
+    </div>
+    <div class="col-lg-5 text-center">
+      <div class="row g-3 text-start">
+        <div class="col-6">
+          <div class="p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10">
+            <div class="fs-3 fw-bold text-warning">{{ tong_so_xe }}+</div>
+            <div class="small text-light">Mẫu xe sẵn kho</div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10">
+            <div class="fs-3 fw-bold text-warning">{{ tong_hang_xe }}</div>
+            <div class="small text-light">Thương hiệu uy tín</div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10">
+            <div class="fs-3 fw-bold text-warning">5 Năm</div>
+            <div class="small text-light">Bảo hành chính hãng</div>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-3 rounded-4 bg-white bg-opacity-10 border border-white border-opacity-10">
+            <div class="fs-3 fw-bold text-warning">24/7</div>
+            <div class="small text-light">Cứu hộ &amp; tư vấn</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0"><i class="bi bi-tags-fill text-danger me-2"></i>Thương hiệu phân phối</h3>
+    <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="text-danger text-decoration-none fw-semibold">Xem tất cả <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="row g-3">
+    {% for hang in danh_sach_hang_xe %}
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="{% url 'cua_hang_xe:danh_sach_xe' %}?hang={{ hang.duong_dan }}" class="card text-center text-decoration-none text-dark p-3 h-100 shadow-sm border-0">
+          <div class="fw-bold fs-6">{{ hang.ten_hang }}</div>
+          <small class="text-muted">{{ hang.quoc_gia }}</small>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% if xe_noi_bat %}
+<section class="mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0"><i class="bi bi-star-fill text-warning me-2"></i>Xe nổi bật</h3>
+    <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="text-danger text-decoration-none fw-semibold">Xem thêm <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="row g-4">
+    {% for xe in xe_noi_bat %}
+      <div class="col-md-6 col-lg-4">
+        {% include 'thanh_phan/the_xe.html' %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if xe_khuyen_mai %}
+<section class="mb-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0"><i class="bi bi-fire text-danger me-2"></i>Ưu đãi giảm giá đặc biệt</h3>
+    <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="text-danger text-decoration-none fw-semibold">Xem tất cả <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="row g-4">
+    {% for xe in xe_khuyen_mai %}
+      <div class="col-md-6 col-lg-3">
+        {% include 'thanh_phan/the_xe.html' %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0"><i class="bi bi-clock-history text-primary me-2"></i>Xe mới về Showroom</h3>
+    <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="text-danger text-decoration-none fw-semibold">Khám phá thêm <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="row g-4">
+    {% for xe in xe_moi_nhat %}
+      <div class="col-md-6 col-lg-3">
+        {% include 'thanh_phan/the_xe.html' %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

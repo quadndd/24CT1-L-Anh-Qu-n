@@ -1,0 +1,138 @@
+{% extends 'khung_chinh.html' %}
+{% load static bo_loc_tien_te %}
+
+{% block tieu_de %}Danh Sách Xe Ô Tô - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="fw-bold mb-1">Danh sách xe đang bán</h2>
+    <p class="text-muted mb-0">Tìm thấy <strong>{{ trang_xe.paginator.count }}</strong> mẫu xe phù hợp</p>
+  </div>
+  <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-clockwise me-1"></i>Xóa bộ lọc
+  </a>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-3">
+    <div class="card border-0 shadow-sm p-3">
+      <h5 class="fw-bold mb-3"><i class="bi bi-funnel me-2 text-danger"></i>Bộ lọc tìm kiếm</h5>
+      <form method="get" class="d-grid gap-3">
+        <div>
+          <label class="form-label small fw-semibold">Từ khóa</label>
+          <input type="text" name="tu_khoa" class="form-control form-control-sm" value="{{ tu_khoa }}" placeholder="Tên xe, động cơ...">
+        </div>
+
+        <div>
+          <label class="form-label small fw-semibold">Hãng xe</label>
+          <select name="hang" class="form-select form-select-sm">
+            <option value="">-- Tất cả hãng --</option>
+            {% for hang in danh_sach_hang_xe %}
+              <option value="{{ hang.duong_dan }}" {% if hang_slug == hang.duong_dan %}selected{% endif %}>{{ hang.ten_hang }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label small fw-semibold">Loại xe</label>
+          <select name="loai" class="form-select form-select-sm">
+            <option value="">-- Tất cả loại --</option>
+            {% for loai in danh_sach_loai_xe %}
+              <option value="{{ loai.duong_dan }}" {% if loai_slug == loai.duong_dan %}selected{% endif %}>{{ loai.ten_loai }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label small fw-semibold">Mức giá</label>
+          <select name="muc_gia" class="form-select form-select-sm">
+            <option value="">-- Tất cả mức giá --</option>
+            <option value="duoi_700" {% if muc_gia == 'duoi_700' %}selected{% endif %}>Dưới 700 triệu</option>
+            <option value="700_1500" {% if muc_gia == '700_1500' %}selected{% endif %}>700 triệu - 1,5 tỷ</option>
+            <option value="1500_3000" {% if muc_gia == '1500_3000' %}selected{% endif %}>1,5 tỷ - 3 tỷ</option>
+            <option value="tren_3000" {% if muc_gia == 'tren_3000' %}selected{% endif %}>Trên 3 tỷ</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label small fw-semibold">Nhiên liệu</label>
+          <select name="nhien_lieu" class="form-select form-select-sm">
+            <option value="">-- Tất cả --</option>
+            {% for ma, ten in lua_chon_nhien_lieu %}
+              <option value="{{ ma }}" {% if nhien_lieu == ma %}selected{% endif %}>{{ ten }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label small fw-semibold">Hộp số</label>
+          <select name="hop_so" class="form-select form-select-sm">
+            <option value="">-- Tất cả --</option>
+            {% for ma, ten in lua_chon_hop_so %}
+              <option value="{{ ma }}" {% if hop_so == ma %}selected{% endif %}>{{ ten }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label class="form-label small fw-semibold">Sắp xếp</label>
+          <select name="sap_xep" class="form-select form-select-sm">
+            <option value="moi_nhat" {% if sap_xep == 'moi_nhat' %}selected{% endif %}>Mới nhất / Nổi bật</option>
+            <option value="gia_tang" {% if sap_xep == 'gia_tang' %}selected{% endif %}>Giá tăng dần</option>
+            <option value="gia_giam" {% if sap_xep == 'gia_giam' %}selected{% endif %}>Giá giảm dần</option>
+            <option value="xem_nhieu" {% if sap_xep == 'xem_nhieu' %}selected{% endif %}>Xem nhiều nhất</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn nut-chinh btn-sm">
+          <i class="bi bi-search me-1"></i>Áp dụng bộ lọc
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-9">
+    {% if trang_xe %}
+      <div class="row g-4">
+        {% for xe in trang_xe %}
+          <div class="col-md-6 col-xl-4">
+            {% include 'thanh_phan/the_xe.html' %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if trang_xe.has_other_pages %}
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if trang_xe.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?trang={{ trang_xe.previous_page_number }}&tu_khoa={{ tu_khoa }}&hang={{ hang_slug }}&loai={{ loai_slug }}&muc_gia={{ muc_gia }}&nhien_lieu={{ nhien_lieu }}&hop_so={{ hop_so }}&sap_xep={{ sap_xep }}">Trước</a>
+              </li>
+            {% endif %}
+            {% for so in trang_xe.paginator.page_range %}
+              <li class="page-item {% if trang_xe.number == so %}active{% endif %}">
+                <a class="page-link" href="?trang={{ so }}&tu_khoa={{ tu_khoa }}&hang={{ hang_slug }}&loai={{ loai_slug }}&muc_gia={{ muc_gia }}&nhien_lieu={{ nhien_lieu }}&hop_so={{ hop_so }}&sap_xep={{ sap_xep }}">{{ so }}</a>
+              </li>
+            {% endfor %}
+            {% if trang_xe.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?trang={{ trang_xe.next_page_number }}&tu_khoa={{ tu_khoa }}&hang={{ hang_slug }}&loai={{ loai_slug }}&muc_gia={{ muc_gia }}&nhien_lieu={{ nhien_lieu }}&hop_so={{ hop_so }}&sap_xep={{ sap_xep }}">Sau</a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="card border-0 shadow-sm p-5 text-center">
+        <i class="bi bi-search fs-1 text-muted mb-3"></i>
+        <h5>Không tìm thấy mẫu xe nào phù hợp</h5>
+        <p class="text-muted">Vui lòng thử thay đổi từ khóa hoặc bộ lọc tìm kiếm.</p>
+        <div>
+          <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="btn btn-danger">Xem toàn bộ xe</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

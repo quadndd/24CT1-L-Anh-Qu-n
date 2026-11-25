@@ -1,0 +1,115 @@
+{% extends 'khung_chinh.html' %}
+{% load bo_loc_tien_te %}
+
+{% block tieu_de %}Thông Tin Người Dùng - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm p-4">
+      <div class="d-flex align-items-center gap-3 mb-4">
+        {% if ho_so.anh_dai_dien %}
+          <img src="{{ ho_so.anh_dai_dien.url }}" class="rounded-circle object-fit-cover" style="width:72px;height:72px;" alt="Ảnh đại diện">
+        {% else %}
+          <div class="rounded-circle bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center" style="width:72px;height:72px;">
+            <i class="bi bi-person-fill fs-2"></i>
+          </div>
+        {% endif %}
+        <div>
+          <h4 class="fw-bold mb-0">{{ ho_so.lay_ten_hien_thi }}</h4>
+          <small class="text-muted">@{{ user.username }} &bull; {{ user.email }}</small>
+        </div>
+      </div>
+
+      <h5 class="fw-bold mb-3">Cập nhật thông tin cá nhân</h5>
+      <form method="post" enctype="multipart/form-data" class="d-grid gap-3">
+        {% csrf_token %}
+        <div>
+          <label class="form-label small fw-semibold">{{ bieu_mau_tai_khoan.email.label }}</label>
+          {{ bieu_mau_tai_khoan.email }}
+        </div>
+        {% for truong in bieu_mau_ho_so %}
+          <div>
+            <label class="form-label small fw-semibold">{{ truong.label }}</label>
+            {{ truong }}
+          </div>
+        {% endfor %}
+        <div class="d-flex gap-2 mt-2">
+          <button type="submit" class="btn nut-chinh flex-fill">Lưu thay đổi</button>
+          <a href="{% url 'tai_khoan:doi_mat_khau' %}" class="btn btn-outline-secondary">Đổi mật khẩu</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-7 d-grid gap-4 align-content-start">
+    <div class="card border-0 shadow-sm p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0"><i class="bi bi-receipt text-danger me-2"></i>Đơn hàng gần đây</h5>
+        <a href="{% url 'don_hang:lich_su_don_hang' %}" class="small text-danger text-decoration-none fw-semibold">Xem tất cả</a>
+      </div>
+      {% if cac_don_hang %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th>Mã đơn</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for don in cac_don_hang %}
+                <tr>
+                  <td class="fw-semibold">{{ don.ma_don_hang }}</td>
+                  <td>{{ don.ngay_dat|date:"d/m/Y" }}</td>
+                  <td class="text-danger fw-semibold">{{ don.tong_thanh_toan|tien_vnd }}</td>
+                  <td><span class="badge bg-secondary">{{ don.get_trang_thai_display }}</span></td>
+                  <td><a href="{% url 'don_hang:chi_tiet_don_hang' don.ma_don_hang %}" class="btn btn-sm btn-outline-dark">Chi tiết</a></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Bạn chưa có đơn hàng nào.</p>
+      {% endif %}
+    </div>
+
+    <div class="card border-0 shadow-sm p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0"><i class="bi bi-calendar-check text-primary me-2"></i>Lịch hẹn lái thử</h5>
+        <a href="{% url 'cua_hang_xe:dat_lich_lai_thu' %}" class="small text-danger text-decoration-none fw-semibold">+ Đặt lịch mới</a>
+      </div>
+      {% if cac_lich_lai_thu %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead class="table-light">
+              <tr>
+                <th>Mẫu xe</th>
+                <th>Ngày hẹn</th>
+                <th>Giờ hẹn</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for lich in cac_lich_lai_thu %}
+                <tr>
+                  <td class="fw-semibold">{{ lich.xe.ten_xe }}</td>
+                  <td>{{ lich.ngay_hen|date:"d/m/Y" }}</td>
+                  <td>{{ lich.gio_hen|time:"H:i" }}</td>
+                  <td><span class="badge bg-info text-dark">{{ lich.get_trang_thai_display }}</span></td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="text-muted mb-0">Bạn chưa đăng ký lịch lái thử nào.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

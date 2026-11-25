@@ -1,0 +1,96 @@
+{% extends 'khung_chinh.html' %}
+{% load static bo_loc_tien_te %}
+
+{% block tieu_de %}Giỏ Hàng - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<h2 class="fw-bold mb-4"><i class="bi bi-cart3 text-danger me-2"></i>Giỏ hàng của bạn</h2>
+
+{% if cac_muc %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm p-3">
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Mẫu xe</th>
+                <th>Đơn giá</th>
+                <th style="width: 150px;">Số lượng</th>
+                <th>Thành tiền</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for muc in cac_muc %}
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center gap-3">
+                      <div style="width: 80px; height: 56px; background: #f1f5f9;" class="rounded overflow-hidden flex-shrink-0">
+                        {% if muc.xe.hinh_anh_chinh %}
+                          <img src="{{ muc.xe.hinh_anh_chinh.url }}" class="w-100 h-100 object-fit-cover" alt="{{ muc.xe.ten_xe }}">
+                        {% elif muc.xe.duong_dan_anh_mau %}
+                          <img src="{% static muc.xe.duong_dan_anh_mau %}" class="w-100 h-100 object-fit-cover" alt="{{ muc.xe.ten_xe }}">
+                        {% endif %}
+                      </div>
+                      <div>
+                        <a href="{% url 'cua_hang_xe:chi_tiet_xe' muc.xe.duong_dan %}" class="fw-bold text-dark text-decoration-none">
+                          {{ muc.xe.hang_xe.ten_hang }} {{ muc.xe.ten_xe }}
+                        </a>
+                        <div class="small text-muted">Màu: {{ muc.mau_da_chon|default:muc.xe.mau_sac }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ muc.xe.lay_gia_hien_tai|tien_vnd }}</td>
+                  <td>
+                    <form action="{% url 'don_hang:cap_nhat_gio_hang' muc.pk %}" method="post" class="d-flex gap-1">
+                      {% csrf_token %}
+                      <input type="number" name="so_luong" value="{{ muc.so_luong }}" min="1" max="{{ muc.xe.so_luong_ton }}" class="form-control form-control-sm">
+                      <button type="submit" class="btn btn-sm btn-outline-dark" title="Cập nhật"><i class="bi bi-check-lg"></i></button>
+                    </form>
+                  </td>
+                  <td class="fw-bold text-danger">{{ muc.thanh_tien|tien_vnd }}</td>
+                  <td>
+                    <a href="{% url 'don_hang:xoa_khoi_gio' muc.pk %}" class="btn btn-sm btn-outline-danger" title="Xóa">
+                      <i class="bi bi-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm p-4">
+        <h5 class="fw-bold mb-3">Tóm tắt đơn hàng</h5>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Tổng số xe:</span>
+          <strong>{{ gio_hang.tong_so_luong }} chiếc</strong>
+        </div>
+        <div class="d-flex justify-content-between mb-3 pb-3 border-bottom">
+          <span class="text-muted">Tạm tính:</span>
+          <strong class="fs-5 text-danger">{{ gio_hang.tong_tien|tien_vnd }}</strong>
+        </div>
+        <a href="{% url 'don_hang:dat_hang' %}" class="btn nut-chinh btn-lg w-100 mb-2">
+          Tiến hành đặt hàng <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+        <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="btn btn-outline-secondary w-100">
+          Tiếp tục xem xe
+        </a>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <div class="card border-0 shadow-sm p-5 text-center">
+    <i class="bi bi-cart-x fs-1 text-muted mb-3"></i>
+    <h5>Giỏ hàng của bạn đang trống</h5>
+    <p class="text-muted">Hãy chọn cho mình mẫu xe ưng ý nhất tại AutoViet Showroom.</p>
+    <div>
+      <a href="{% url 'cua_hang_xe:danh_sach_xe' %}" class="btn nut-chinh">Xem danh sách xe</a>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

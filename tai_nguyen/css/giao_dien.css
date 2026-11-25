@@ -1,0 +1,138 @@
+:root {
+  --mau-chinh: #0f172a;
+  --mau-nhan: #dc2626;
+  --mau-nhan-dam: #b91c1c;
+  --mau-nen: #f8fafc;
+  --mau-vien: #e2e8f0;
+}
+
+body {
+  background-color: var(--mau-nen);
+  color: #1e293b;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.thanh-dieu-huong {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.16);
+}
+
+.thuong-hieu-logo {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  font-size: 1.35rem;
+}
+
+.khung-anh-bia {
+  background: linear-gradient(120deg, #0f172a 0%, #1e293b 55%, #334155 100%);
+  color: #ffffff;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.the-xe {
+  border: 1px solid var(--mau-vien);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #ffffff;
+}
+
+.the-xe:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1);
+}
+
+.khung-anh-xe {
+  height: 200px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.khung-anh-xe img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nhan-giam-gia {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--mau-nhan);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+}
+
+.nhan-noi-bat {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #f59e0b;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+}
+
+.gia-xe-hien-tai {
+  color: var(--mau-nhan);
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+.gia-xe-cu {
+  color: #94a3b8;
+  text-decoration: line-through;
+  font-size: 0.88rem;
+}
+
+.nut-chinh {
+  background-color: var(--mau-nhan);
+  border-color: var(--mau-nhan);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nut-chinh:hover {
+  background-color: var(--mau-nhan-dam);
+  border-color: var(--mau-nhan-dam);
+  color: #ffffff;
+}
+
+.the-thong-so {
+  background: #ffffff;
+  border: 1px solid var(--mau-vien);
+  border-radius: 0.85rem;
+  padding: 1rem;
+}
+
+.chan-trang {
+  background: #0f172a;
+  color: #cbd5e1;
+}
+
+.chan-trang a {
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+.chan-trang a:hover {
+  color: #ffffff;
+}

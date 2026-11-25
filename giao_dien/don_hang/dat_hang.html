@@ -1,0 +1,85 @@
+{% extends 'khung_chinh.html' %}
+{% load bo_loc_tien_te %}
+
+{% block tieu_de %}Đặt Hàng - AutoViet{% endblock %}
+
+{% block noi_dung %}
+<h2 class="fw-bold mb-4"><i class="bi bi-bag-check text-danger me-2"></i>Xác nhận đặt mua xe</h2>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm p-4">
+      <h5 class="fw-bold mb-3">Thông tin nhận xe &amp; thanh toán</h5>
+      <form method="post" class="row g-3">
+        {% csrf_token %}
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ bieu_mau.ho_ten_nguoi_nhan.label }}</label>
+          {{ bieu_mau.ho_ten_nguoi_nhan }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ bieu_mau.so_dien_thoai.label }}</label>
+          {{ bieu_mau.so_dien_thoai }}
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ bieu_mau.email.label }}</label>
+          {{ bieu_mau.email }}
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ bieu_mau.dia_chi_giao_xe.label }}</label>
+          {{ bieu_mau.dia_chi_giao_xe }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ bieu_mau.phuong_thuc_nhan_xe.label }}</label>
+          {{ bieu_mau.phuong_thuc_nhan_xe }}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">{{ bieu_mau.phuong_thuc_thanh_toan.label }}</label>
+          {{ bieu_mau.phuong_thuc_thanh_toan }}
+        </div>
+        <div class="col-12">
+          <label class="form-label fw-semibold">{{ bieu_mau.ghi_chu.label }}</label>
+          {{ bieu_mau.ghi_chu }}
+        </div>
+        <div class="col-12 mt-3">
+          <button type="submit" class="btn nut-chinh btn-lg w-100">
+            <i class="bi bi-check-circle me-2"></i>Hoàn tất đặt hàng
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm p-4">
+      <h5 class="fw-bold mb-3">Chi tiết xe đặt mua</h5>
+      <div class="d-grid gap-3 mb-3">
+        {% for muc in cac_muc %}
+          <div class="d-flex justify-content-between align-items-start border-bottom pb-2">
+            <div>
+              <div class="fw-semibold">{{ muc.xe.hang_xe.ten_hang }} {{ muc.xe.ten_xe }}</div>
+              <small class="text-muted">Màu: {{ muc.mau_da_chon|default:muc.xe.mau_sac }} &bull; SL: {{ muc.so_luong }}</small>
+            </div>
+            <div class="fw-semibold text-end">{{ muc.thanh_tien|tien_vnd }}</div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="d-flex justify-content-between mb-2">
+        <span class="text-muted">Tổng tiền xe:</span>
+        <strong>{{ gio_hang.tong_tien|tien_vnd }}</strong>
+      </div>
+      <div class="d-flex justify-content-between mb-2">
+        <span class="text-muted">Phí vận chuyển:</span>
+        <strong id="phi-van-chuyen-hien-thi">Miễn phí</strong>
+      </div>
+      <hr>
+      <div class="d-flex justify-content-between align-items-center">
+        <span class="fw-bold fs-5">Tổng thanh toán:</span>
+        <span id="tong-thanh-toan-hien-thi" data-tong-tien-xe="{{ gio_hang.tong_tien }}" class="fw-bold fs-4 text-danger">
+          {{ gio_hang.tong_tien|tien_vnd }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
